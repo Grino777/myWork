@@ -1,0 +1,15 @@
+.window {
+    display: grid;
+
+    height: 95%;
+    width: 100%;
+
+    grid-template-columns: 1fr 4fr;
+
+    column-gap: 20px;
+
+}
+
+.empty {
+    height: 5%;
+}

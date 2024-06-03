@@ -10,13 +10,13 @@ from backend.db import engine
 Base = declarative_base()
 
 
-class TypesOfTest(Base):
+class TypesOfTests(Base):
     """Таблица типов испытаний"""
 
     __tablename__ = "types_of_tests"
 
-    id = Column(SmallInteger, primary_key=True, index=True)
-    test_name = Column(String)
+    id = Column(SmallInteger, primary_key=True, index=True, autoincrement=True)
+    test_name = Column(String, unique=True)
     # templates = relationship("ProductTemplate", back_populates="types_of_tests")
 
 
@@ -26,7 +26,7 @@ class Product(Base):
     __tablename__ = "all_products"
 
     id = Column(SmallInteger, primary_key=True, index=True)
-    products_name = Column(String)
+    product_name = Column(String, unique=True)
 
 
 class ProductTemplate(Base):
@@ -49,7 +49,8 @@ class ProductsInWork(Base):
     product_id = Column(Integer, ForeignKey("all_products.id"))
     test_id = Column(Integer, ForeignKey("types_of_tests.id"))
     order_of_test = Column(Integer, nullable=False)
-    generation = Column(SmallInteger, nullable=False)
+    generation = Column(SmallInteger)
+    year = Column(Integer)
 
 
 class Notes(Base):
@@ -69,8 +70,8 @@ class TestsInformation(Base):
     __tablename__ = "test_information"
 
     id = Column(SmallInteger, primary_key=True, index=True)
-    product_id = Column(Integer, ForeignKey("products_in_work.product_id"))
-    test_id = Column(Integer, ForeignKey("products_in_work.test_id"))
+    product_id = Column(Integer, ForeignKey("all_products.id"))
+    test_id = Column(Integer, ForeignKey("types_of_tests.id"))
     start_time = Column(DateTime)
     end_time = Column(DateTime)
 
@@ -83,8 +84,8 @@ class TestTime(Base):
     id = Column(SmallInteger, primary_key=True)
     product_id = Column(Integer, ForeignKey("all_products.id"))
     test_id = Column(Integer, ForeignKey("types_of_tests.id"))
-    total_time = Column(Time)
+    test_time = Column(Time)
 
 
-Base.metadata.drop_all(bind=engine)
+# TestTime.__table__.drop(engine)
 Base.metadata.create_all(bind=engine)
