@@ -21,20 +21,34 @@ const ProductsWindow = () => {
         fetchData();
     }, []);
 
+    const emptyBlock = <div className="empty">Изделия отсутствуют</div>;
+
+    const productsList = (
+        <ul>
+            {products.map((product) => {
+                return <Product key={product.id} product={product} />;
+            })}
+        </ul>
+    );
+
+    const loader = <Loader />;
+
+    const content = isLoading
+        ? loader
+        : products.length > 0
+        ? productsList
+        : emptyBlock;
+
+    console.log(content);
+
+    return <div className="products">{content}</div>;
+};
+
+const Product = ({product}) => {
     return (
-        <div className="products">
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <ul>
-                    {products.map((product) => (
-                        <li key={product.id}>
-                            <h3>{product.product_name}</h3>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
+        <li>
+            <h3>{product.product_name}</h3>
+        </li>
     );
 };
 
